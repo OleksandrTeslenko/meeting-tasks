@@ -157,7 +157,7 @@ try {
         $('#settingsTasks').click(function () {
             $('.calendar-content').hide();
             $('.people-sidebar').show();
-            $('.task-content').show(); 
+            $('.task-content').show();
         });
 
         $('#settingsCalendar').click(function () {
@@ -554,7 +554,7 @@ try {
                     taskList.append(taskElement);
                     task_data.push(task);
                 } else {
-                    if ((currentStatusFilter == task.status_id) || (currentStatusFilter == 0 && [1, 2, 3].includes(task.status_id))) {
+                    if ((currentStatusFilter == task.status_id) || (currentStatusFilter == 0)) {
                         isset_tasks = true;
                         taskList.append(taskElement);
                         task_data.push(task);
