@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <title>Task Management System</title>
+
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -10,7 +12,6 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Clear-Site-Data" content="cache, cookies, storage, executionContexts" />
     <meta http-equiv="Expires" content="-1" />
-    <title>Task Management</title>
 
     <link href="./favicon.ico" rel="icon" type="image/x-icon" />
     <link href="./js/bootstrap-5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,10 +20,10 @@
 
     <script type="text/javascript" src="./js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="./js/bootstrap-5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="./js/sweetalert.min.js"></script>
     <script type="text/javascript" src="./js/flatpickr/dist/flatpickr.js"></script>
     <script type="text/javascript" src="./js/flatpickr/dist/l10n/uk.js"></script>
-    <script type="text/javascript" src="./js/settings.js"></script>
+    <script type="text/javascript" src="./js/config.js"></script>
+    <script type="text/javascript" src="./js/data.js"></script>
     <script type="text/javascript" src="./js/app.js"></script>
     <script type="text/javascript" src="./js/script.js"></script>
 </head>
@@ -52,22 +53,64 @@
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <h1>Управління задачами<span class="offline" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    data-bs-title="Обмежене завантаження/створення/корегування даних, лише перегляд (демо)" onfocusout="clearTooltip()">(offline)</span></h1>
+            <div class="header-text">
+                <h1>
+                    <img class="logo_img">
+                    <span class="client-name"></span>
+                    <span class="title">Task Management System</span>
+                    <span class="sub-title">TMS</span>
+                </h1>
+            </div>
             <div class="header-actions">
-                <button id="createTaskBtn" class="btn btn-header" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    data-bs-title="Створити задачу" onfocusout="clearTooltip()">
-                    <img src="./img/add.png" alt="+" width="24" height="24">
+                <button id="createTaskBtn" class="btn btn-header">
+                    <img src="./img/add.png" alt="+" width="18" height="18">
+                    <span>Створити задачу</span>
                 </button>
-                <button id="settings" class="btn btn-header" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    data-bs-title="Налаштування" onfocusout="clearTooltip()">
-                    <img src="./img/office-settings.png" alt="Settings" width="24" height="24">
-                </button>
-                <button id="themeToggle" class="btn btn-header" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <div class="dropdown">
+                    <button id="settings2" class="btn dropdown-toggle btn-header" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">Меню
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" id="settingsTasks">
+                                <img src="./img/tasks.png" alt="Tasks" width="18" height="18">
+                                Задачі
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" id="settingsPeople">
+                                <img src="./img/group_people.png" alt="People" width="18" height="18">
+                                Співробітники
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" id="settingsCalendar">
+                                <img src="./img/calendar_off.png" alt="Calendar" width="18" height="18">
+                                Графік відпусток/вихідних
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" id="settingsGlobal">
+                                <img src="./img/office-settings.png" alt="Settings" width="18" height="18">
+                                Налаштування
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="theme-toggle btn btn-header" data-bs-toggle="tooltip" data-bs-placement="bottom"
                     data-bs-title="Змінити тему" onfocusout="clearTooltip()">
-                    <img src="./img/waxinggibbousmoon.png" alt="🌙" class="theme-icon-dark" width="24" height="24">
-                    <img src="./img/waningcrescentmoon.png" alt="☀️" class="theme-icon-light" width="24" height="24">
+                    <img src="./img/waxinggibbousmoon.png" alt="🌙" class="theme-icon-dark" width="18" height="18">
+                    <img src="./img/waningcrescentmoon.png" alt="☀️" class="theme-icon-light" width="18" height="18">
                 </button>
+                <span class="wifi-status">
+                    <img class="invert-icon hw24 img-wifi-on" src="./img/wifi.svg" alt="Online" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="Повне завантаження/створення/корегування даних"
+                        onfocusout="clearTooltip()" />
+                    <img class="invert-icon hw24 img-wifi-off" src="./img/wifi-off.svg" alt="Offline"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        data-bs-title="Обмежене завантаження/створення/корегування даних, лише перегляд (демо)"
+                        onfocusout="clearTooltip()" />
+                </span>
             </div>
         </div>
     </header>
@@ -75,8 +118,26 @@
     <!-- Main Content -->
     <div class="main-container">
         <aside class="people-sidebar">
-            <h2>Співробітники:</h2>
+            <form class="search" role="search" data-search-type="people">
+                <input type="search" class="search-input" placeholder="Пошук..." aria-label="Search">
+                <button class="btn btn-search" type="submit">
+                    <img src="./img/search.svg" alt="Пошук" class="invert-icon">
+                </button>
+            </form>
+            <div class="people-sidebar-count">
+                <p>Співробітники:</p>
+                <span>0</span>
+            </div>
             <div id="peopleList" class="people-list"></div>
+            <div class="people-sidebar-footer">
+                <button type="button" id="toggleSidebarBtn" class="people-sidebar-toggle-btn">
+                    <img src="./img/previous.png" alt="<<" class="invert-icon">
+                </button>
+                <div class="people-sidebar-footer-info"><span class="client-name"></span>&copy;<span
+                        id="current-year"></span><span>v:
+                        1.0.1</span>
+                </div>
+            </div>
         </aside>
 
         <!-- Task Content -->
@@ -97,54 +158,96 @@
                         <p>Керування та відстеження задач</p>
                     </div>
                     <div class="task-filters">
-                        <form class="search" role="search" onsubmit="return handleSearch(event)">
-                            <input type="search" id="searchInput" placeholder="Пошук завдання..." class="search-input"
-                                aria-label="Search">
+                        <form class="search" role="search" data-search-type="task">
+                            <input type="search" class="search-input" placeholder="Пошук задач..." aria-label="Search">
                             <button class="btn btn-search" type="submit">
                                 <img src="./img/search.svg" alt="Пошук" class="invert-icon">
                             </button>
                         </form>
-
-                        <select id="statusFilter" class="form-select status-filter">
-                            <option value="0">Активні</option>
-                            <option value="1">В черзі</option>
-                            <option value="2">В роботі</option>
-                            <option value="3">На перевірці</option>
-                            <option value="4">Готово</option>
-                            <option value="5">Відхилено</option>
-                        </select>
                     </div>
                 </div>
 
-                <div class="task-stats" id="taskStats">
-                    <span class="stat-badge">Всього: <span class="all">0</span></span>
-                    <button type="button" class="btn position-relative btn-state btn-state-active"
-                        data-state="0">Активні
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                <div class="status-summary" id="statusSummary">
+                    <button class="status-chip" data-status="all" data-state="0">
+                        <span class="status-icon status-all">
+                            <img src="./img/status/list-ul.svg" alt="All">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">Всього</span>
+                            <span class="status-count">55</span>
+                        </div>
                     </button>
-                    <button type="button" class="btn position-relative btn-state btn-state-in-line" data-state="1">В
-                        черзі
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    <!-- <button class="status-chip" data-status="active" data-state="0">
+                        <span class="status-icon status-active">
+                            <img src="./img/status/record-circle.svg" alt="Active">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">Активні</span>
+                            <span class="status-count">12</span>
+                        </div>
+                    </button> -->
+                    <button class="status-chip active" data-status="in-line" data-state="1">
+                        <span class="status-icon status-in-line">
+                            <img src="./img/status/clock.svg" alt="In line">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">В черзі</span>
+                            <span class="status-count">10</span>
+                        </div>
                     </button>
-                    <button type="button" class="btn position-relative btn-state btn-state-work" data-state="2">В роботі
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    <button class="status-chip" data-status="work" data-state="2">
+                        <span class="status-icon status-work">
+                            <img src="./img/status/briefcase.svg" alt="Work">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">В роботі</span>
+                            <span class="status-count">1</span>
+                        </div>
                     </button>
-                    <button type="button" class="btn position-relative btn-state btn-state-review" data-state="3">На
-                        перевірці
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    <button class="status-chip" data-status="review" data-state="3">
+                        <span class="status-icon status-review">
+                            <img src="./img/status/eye.svg" alt="Review">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">На перевірці</span>
+                            <span class="status-count">1</span>
+                        </div>
                     </button>
-                    <button type="button" class="btn position-relative btn-state btn-state-ready" data-state="4">Готово
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    <button class="status-chip" data-status="review-client" data-state="7">
+                        <span class="status-icon status-review-client">
+                            <img src="./img/status/person.svg" alt="Client review">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">На перевірці у клієнта</span>
+                            <span class="status-count">1</span>
+                        </div>
                     </button>
-                    <button type="button" class="btn position-relative btn-state btn-state-cancel"
-                        data-state="5">Відхилено
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    <button class="status-chip" data-status="suspended" data-state="6">
+                        <span class="status-icon status-suspended">
+                            <img src="./img/status/pause-circle.svg" alt="Suspended">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">Призупинено</span>
+                            <span class="status-count">10</span>
+                        </div>
+                    </button>
+                    <button class="status-chip" data-status="ready" data-state="4">
+                        <span class="status-icon status-ready">
+                            <img src="./img/status/check-circle.svg" alt="Ready">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">Готово</span>
+                            <span class="status-count">31</span>
+                        </div>
+                    </button>
+                    <button class="status-chip" data-status="rejected" data-state="5">
+                        <span class="status-icon status-rejected">
+                            <img src="./img/status/x-circle.svg" alt="Rejected">
+                        </span>
+                        <div class="status-info">
+                            <span class="status-title">Відхилено</span>
+                            <span class="status-count">10</span>
+                        </div>
                     </button>
                 </div>
 
@@ -158,7 +261,16 @@
                     </div>
                     <div id="taskList" class="task-list"></div>
                 </div>
+
+                <nav id="tasksPaginationWrapper">
+                    <ul class="pagination pagination-sm" id="tasksPagination"></ul>
+                </nav>
             </div>
+        </main>
+
+        <!-- Calendar Content -->
+        <main class="calendar-content">
+            Calendar
         </main>
     </div>
 
@@ -181,26 +293,17 @@
                         placeholder="Назва проекту" autocomplete="off" value="">
                     <label for="projectName">Назва проекту</label>
                 </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="responsiblePM" name="responsiblePM"
-                        aria-label="responsiblePM" required></select>
-                    <label for="responsiblePM">Відповідальний<span class="required">*</span></label>
-                </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="assignedTo" name="assignedTo" aria-label="assignedTo"
-                        required></select>
-                    <label for="assignedTo">Виконавець<span class="required">*</span></label>
-                </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="taskStatus" name="taskStatus" aria-label="taskStatus"
-                        required>
-                        <option value="1">В черзі</option>
-                        <option value="2">В роботі</option>
-                        <option value="3">На перевірці</option>
-                        <option value="4">Готово</option>
-                        <option value="5">Відхилено</option>
-                    </select>
-                    <label for="taskStatus">Статус<span class="required">*</span></label>
+                <div class="mb-3 column-data">
+                    <div class="form-floating">
+                        <select class="form-select select" id="assignedTo" name="assignedTo" aria-label="assignedTo"
+                            required></select>
+                        <label for="assignedTo">Виконавець<span class="required">*</span></label>
+                    </div>
+                    <div class="form-floating">
+                        <select class="form-select select" id="responsiblePM" name="responsiblePM"
+                            aria-label="responsiblePM" required></select>
+                        <label for="responsiblePM">Відповідальний<span class="required">*</span></label>
+                    </div>
                 </div>
                 <div class="form-floating mb-3">
                     <select class="form-select select" id="taskPriority" name="taskPriority" aria-label="taskPriority"
@@ -214,15 +317,30 @@
                     </select>
                     <label for="taskPriority">Пріоритет<span class="required">*</span></label>
                 </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="taskType" name="taskType" aria-label="taskType" required>
-                        <option value="1">Баг</option>
-                        <option value="2">Дороботка</option>
-                        <option value="3">Завдання</option>
-                        <option value="4">Функціональність</option>
-                        <option value="5">Техпідтримка</option>
-                    </select>
-                    <label for="taskType">Тип<span class="required">*</span></label>
+                <div class="mb-3 column-data">
+                    <div class="form-floating">
+                        <select class="form-select select" id="taskType" name="taskType" aria-label="taskType" required>
+                            <option value="1">Баг</option>
+                            <option value="2">Дороботка</option>
+                            <option value="3">Завдання</option>
+                            <option value="4">Функціональність</option>
+                            <option value="5">Техпідтримка</option>
+                        </select>
+                        <label for="taskType">Тип<span class="required">*</span></label>
+                    </div>
+                    <div class="form-floating">
+                        <select class="form-select select" id="taskStatus" name="taskStatus" aria-label="taskStatus"
+                            required>
+                            <option value="1">В черзі</option>
+                            <option value="2">В роботі</option>
+                            <option value="6">Призупинено</option>
+                            <option value="3">На перевірці</option>
+                            <option value="7">На перевірці у клієнта</option>
+                            <option value="4">Готово</option>
+                            <option value="5">Відхилено</option>
+                        </select>
+                        <label for="taskStatus">Статус<span class="required">*</span></label>
+                    </div>
                 </div>
                 <div class="form-floating mb-3">
                     <span class="estimate-span">Оцінка часу (Estimate time):</span><span class="required">*</span>
@@ -293,20 +411,19 @@
     <div id="peopleModal" class="modal modal-fullscreen">
         <div class="modal-content modal-fullscreen">
             <div class="modal-header">
-                <h3>Налаштування (співробітники)</h3>
+                <h3>Співробітники</h3>
                 <button class="modal-close" data-modal-id="peopleModal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-body-header">
-                    <form class="search" role="search" onsubmit="return handleSearch(event)">
-                        <input type="search" id="searchInput" placeholder="Пошук..." class="search-input"
-                            aria-label="Search">
+                    <button id="createPersonBtn" class="btn btn-header" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="Створити користувача" onfocusout="clearTooltip()">
+                        <img src="./img/add.png" alt="+" width="18" height="18">
+                    </button>
+                    <form class="search" role="search" data-search-type="people-modal">
+                        <input type="search" class="search-input" placeholder="Пошук..." aria-label="Search">
                         <button class="btn btn-search" type="submit">
                             <img src="./img/search.svg" alt="Пошук" class="invert-icon">
-                        </button>
-                        <button id="createPersonBtn" class="btn btn-header" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" data-bs-title="Створити користувача" onfocusout="clearTooltip()">
-                            <img src="./img/add.png" alt="+" width="24" height="24">
                         </button>
                     </form>
                 </div>
@@ -357,41 +474,46 @@
                         placeholder="По-батькові" autocomplete="off" value="">
                     <label for="personPatronymic">По-батькові</label>
                 </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="personPosition" name="personPosition"
-                        aria-label="personPosition" required>
-                        <option value="Developer">Developer</option>
-                        <option value="Project manager">Project manager</option>
-                        <option value="Supervisor">Supervisor</option>
-                        <option value="System administrator">System administrator</option>
-                        <option value="Tester">Tester</option>
-                    </select>
-                    <label for="personPosition">Позиція<span class="required">*</span></label>
+                <div class="mb-3 column-data">
+                    <div class="form-floating">
+                        <select class="form-select select" id="personPosition" name="personPosition"
+                            aria-label="personPosition" required>
+                            <option value="Developer">Developer</option>
+                            <option value="Project manager">Project manager</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="System administrator">System administrator</option>
+                            <option value="Tester">Tester</option>
+                        </select>
+                        <label for="personPosition">Позиція<span class="required">*</span></label>
+                    </div>
+                    <div class="form-floating">
+                        <select class="form-select select" id="personSex" name="personSex" aria-label="personSex"
+                            required>
+                            <option value="1">Чоловіча</option>
+                            <option value="2">Жіноча</option>
+                        </select>
+                        <label for="personSex">Стать<span class="required">*</span></label>
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="personSex" name="personSex" aria-label="personSex" required>
-                        <option value="1">Чоловіча</option>
-                        <option value="2">Жіноча</option>
-                    </select>
-                    <label for="personSex">Стать<span class="required">*</span></label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="phone" class="form-control" id="personPhone" name="personPhone"
-                        placeholder="+38(000)000-00-00" autocomplete="off" value="">
-                    <label for="personPhone">Телефон</label>
+                <div class="mb-3 column-data">
+                    <div class="form-floating">
+                        <select class="form-select select" id="personState" name="personState" aria-label="personState"
+                            required>
+                            <option value="0">Працює</option>
+                            <option value="1">Звільнено</option>
+                        </select>
+                        <label for="personState">Статус<span class="required">*</span></label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="phone" class="form-control" id="personPhone" name="personPhone"
+                            placeholder="+38(000)000-00-00" autocomplete="off" value="">
+                        <label for="personPhone">Телефон</label>
+                    </div>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="personEmail" name="personEmail"
                         placeholder="email@ua.com" autocomplete="off" value="">
                     <label for="personEmail">Email</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select select" id="personState" name="personState" aria-label="personState"
-                        required>
-                        <option value="0">Працює</option>
-                        <option value="1">Звільнено</option>
-                    </select>
-                    <label for="personState">Статус<span class="required">*</span></label>
                 </div>
             </form>
             <div class="modal-footer">
@@ -399,6 +521,48 @@
                     <button type="button" class="btn btn-primary modal-cancel"
                         data-modal-id="personModal">Скасувати</button>
                     <button type="button" id="savePersonButton" class="btn btn-primary btn-save">Зберегти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Налаштування</h3>
+                <button class="modal-close" data-modal-id="settingsModal">&times;</button>
+            </div>
+            <form id="settingsForm" class="modal-form">
+                <div>
+                    <img class="invert-icon hw24 img-wifi-on" src="./img/wifi.svg" alt="Online" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="Повне завантаження/створення/корегування даних"
+                        onfocusout="clearTooltip()" />
+                    <span class="img-wifi-on settings-description">Повне завантаження/створення/корегування даних</span>
+
+                    <img class="invert-icon hw24 img-wifi-off" src="./img/wifi-off.svg" alt="Offline"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        data-bs-title="Обмежене завантаження/створення/корегування даних, лише перегляд (демо)"
+                        onfocusout="clearTooltip()" />
+                    <span class="img-wifi-off settings-description">Обмежене завантаження/створення/корегування даних,
+                        лише перегляд
+                        (демо)</span>
+                </div>
+
+                <div>
+                    <button class="theme-toggle btn btn-header" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        data-bs-title="Змінити тему" onfocusout="clearTooltip()">
+                        <img src="./img/waxinggibbousmoon.png" alt="🌙" class="theme-icon-dark" width="18" height="18">
+                        <img src="./img/waningcrescentmoon.png" alt="☀️" class="theme-icon-light" width="18"
+                            height="18">
+                    </button>
+                    <span class="settings-description">Змінити тему</span>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-primary modal-cancel"
+                        data-modal-id="settingsModal">Скасувати</button>
                 </div>
             </div>
         </div>

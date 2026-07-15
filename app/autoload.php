@@ -23,7 +23,7 @@ ini_set('memory_limit', '64M');
 ini_set('file_uploads', 0);
 ini_set('post_max_size', '256M');
 
-if (0) {
+if (1) {
     ini_set('display_errors', 'stderr');
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -40,11 +40,15 @@ require_once(__ROOT__ . "/vendor/autoload.php");
 use Dotenv\Dotenv;
 
 $baseDir = __ROOT__ . "/../";
-// $dotenv = Dotenv\Dotenv::createImmutable($baseDir);
-if (!file_exists($baseDir . '.env')) throw new \Exception("Unable to read any of the environment file(s) (.env)", 400);
-$dotenv = new Dotenv($baseDir);
-$dotenv->load();
-$dotenv->required(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME', 'DB_PREFIX', 'DB_PORT']);
+
+if (file_exists($baseDir . '.env')) {
+    if (method_exists(Dotenv::class, 'createImmutable')) {
+        $dotenv = Dotenv::createImmutable($baseDir);
+    } else {
+        $dotenv = new Dotenv($baseDir);
+    }
+    $dotenv->load();
+}
 
 require_once(__ROOT__ . "/define.php");
 require_once(__ROOT__ . "/function.php");

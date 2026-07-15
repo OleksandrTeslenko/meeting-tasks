@@ -1,15 +1,11 @@
 {
-    "name": "api/task-management",
-    "description": "Task Management for team members",
+    "name": "api/tocan-task-management",
+    "description": "Tocan Task Management for team members",
     "type": "project",
     "require": {
-        "vlucas/phpdotenv": "^2.4"
+        "vlucas/phpdotenv": "5.5"
     },
-    "config": {
-        "platform": {
-            "php": "7.0.3"
-        }
-    },
+    "config": {},
     "minimum-stability": "stable",
     "prefer-stable": true,
     "authors": [

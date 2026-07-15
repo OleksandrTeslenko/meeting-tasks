@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.14 (64 bit)
 MySQL - 10.4.28-MariaDB : Database - task_management
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -29,12 +30,14 @@ CREATE TABLE `status` (
 
 /*Data for the table `status` */
 
-insert  into `status`(`id`,`name`,`name_lat`) values 
-(1,'В черзі','active'),
-(2,'В роботі','in-progress'),
-(3,'На перевірці','under-review'),
-(4,'Архів','archive'),
-(5,'Відхилено','rejected');
+insert  into `status`(`id`,`name`,`name_lat`) values 
+(1,'В черзі','active'),
+(2,'В роботі','in-progress'),
+(3,'На перевірці','under-review'),
+(4,'Архів','archive'),
+(5,'Відхилено','rejected'),
+(6,'Призупинено','suspended'),
+(7,'На перевірці у клієнта','review-client');
 
 /*Table structure for table `tasks` */
 
@@ -129,9 +132,12 @@ DELIMITER $$
 
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `after_task_add` */$$
 
-/*!50003 CREATE */  /*!50003 TRIGGER `after_task_add` AFTER INSERT ON `tasks` FOR EACH ROW BEGIN
-	INSERT INTO `tasks_history` (`task_id`,`name`,`project`,`responsible_pm`,`assigned_to`,`description`,`status`,`deleted`,`date_creating`,`date_editing`,`priority`,`source`, `action`) 
-	VALUES (NEW.id, NEW.name, NEW.project, NEW.responsible_pm, NEW.assigned_to, NEW.description, NEW.status, NEW.deleted, NEW.date_creating, NEW.date_editing, NEW.priority, NEW.source, 'insert');
+/*!50003 CREATE */  /*!50003 TRIGGER `after_task_add` AFTER INSERT ON `tasks` FOR EACH ROW BEGIN
+
+	INSERT INTO `tasks_history` (`task_id`,`name`,`project`,`responsible_pm`,`assigned_to`,`description`,`status`,`deleted`,`date_creating`,`date_editing`,`priority`,`source`, `action`) 
+
+	VALUES (NEW.id, NEW.name, NEW.project, NEW.responsible_pm, NEW.assigned_to, NEW.description, NEW.status, NEW.deleted, NEW.date_creating, NEW.date_editing, NEW.priority, NEW.source, 'insert');
+
 END */$$
 
 
@@ -144,9 +150,12 @@ DELIMITER $$
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `after_task_update` */$$
 
 /*!50003 CREATE */  /*!50003 TRIGGER `after_task_update` AFTER UPDATE ON `tasks` FOR EACH ROW 
-BEGIN
-	INSERT INTO `tasks_history` (`task_id`,`name`,`project`,`responsible_pm`,`assigned_to`,`description`,`status`,`deleted`,`date_creating`,`date_editing`,`priority`,`source`, `action`) 
-	VALUES (NEW.id, NEW.name, NEW.project, NEW.responsible_pm, NEW.assigned_to, NEW.description, NEW.status, NEW.deleted, NEW.date_creating, NEW.date_editing, NEW.priority, NEW.source, 'update');
+BEGIN
+
+	INSERT INTO `tasks_history` (`task_id`,`name`,`project`,`responsible_pm`,`assigned_to`,`description`,`status`,`deleted`,`date_creating`,`date_editing`,`priority`,`source`, `action`) 
+
+	VALUES (NEW.id, NEW.name, NEW.project, NEW.responsible_pm, NEW.assigned_to, NEW.description, NEW.status, NEW.deleted, NEW.date_creating, NEW.date_editing, NEW.priority, NEW.source, 'update');
+
 END */$$
 
 
